@@ -1,5 +1,0 @@
-package rpcx
-
-var tpl = ``
-
-
