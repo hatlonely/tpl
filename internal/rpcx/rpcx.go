@@ -1,7 +1,9 @@
 package rpcx
 
 import (
+	"fmt"
 	"os"
+	"path/filepath"
 	"text/template"
 
 	"github.com/pkg/errors"
@@ -33,16 +35,23 @@ type Template struct {
 	TplMk   *template.Template
 }
 
-func (t *Template) Render() error {
-	if err := render(t.TplMk, t.options, ".tpl.mk"); err != nil {
+func (t *Template) Render(prefix string) error {
+	if err := render(t.TplMk, t.options, prefix, ".tpl.mk"); err != nil {
 		return errors.Wrap(err, "render tplMK failed")
 	}
 
 	return nil
 }
 
-func render(tpl *template.Template, options *Options, out string) error {
-	fp, err := os.Create(out)
+func render(tpl *template.Template, options *Options, prefix string, out string) error {
+	prefix, err := filepath.Abs(prefix)
+	if err != nil {
+		return errors.Wrap(err, "filepath.Abs failed")
+	}
+	if err := os.MkdirAll(prefix, 0755); err != nil {
+		return errors.Wrap(err, "os.MkdirAll failed")
+	}
+	fp, err := os.Create(fmt.Sprintf("%v/%v", prefix, out))
 	if err != nil {
 		return errors.Wrap(err, "os.Open failed")
 	}
