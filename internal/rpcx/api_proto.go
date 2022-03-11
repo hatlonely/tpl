@@ -5,7 +5,7 @@ syntax = "proto3";
 
 package api;
 
-option go_package = "github.com/hatlonely/go-kit/example/rpcx/api/gen/go/api";
+option go_package = "{{ .Package }}/api/gen/go/api";
 
 import "google/protobuf/empty.proto";
 import "google/api/annotations.proto";

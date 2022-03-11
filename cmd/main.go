@@ -6,7 +6,8 @@ import (
 
 func main() {
 	tpl, err := rpcx.NewTemplateWithOptions(&rpcx.Options{
-		Name: "rpc-tool",
+		Name:    "rpc-tool",
+		Package: "github.com/hatlonely/demo",
 		Registry: struct {
 			Endpoint  string `dft:"docker.io"`
 			Namespace string
@@ -14,7 +15,7 @@ func main() {
 			Endpoint:  "docker.io",
 			Namespace: "hatlonely",
 		},
-		GoProxy: "",
+		GoProxy: "https://goproxy.cn",
 	})
 
 	if err != nil {

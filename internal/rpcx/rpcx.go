@@ -11,6 +11,7 @@ import (
 
 type Options struct {
 	Name     string
+	Package  string
 	Registry struct {
 		Endpoint  string `dft:"docker.io"`
 		Namespace string
