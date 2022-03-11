@@ -50,6 +50,11 @@ func NewTemplateWithOptions(options *Options) (*Template, error) {
 		return nil, errors.Wrap(err, "template.New internal/service/service.go failed")
 	}
 
+	cmdMain, err := template.New("").Parse(cmdMain)
+	if err != nil {
+		return nil, errors.Wrap(err, "template.New cmd/main.go failed")
+	}
+
 	return &Template{
 		options:                options,
 		TplMk:                  tplMk,
@@ -58,6 +63,7 @@ func NewTemplateWithOptions(options *Options) (*Template, error) {
 		Gitignore:              gitignore,
 		apiProto:               apiProto,
 		internalServiceService: internalServiceService,
+		cmdMain:                cmdMain,
 	}, nil
 }
 
@@ -69,6 +75,7 @@ type Template struct {
 	Gitignore              *template.Template
 	apiProto               *template.Template
 	internalServiceService *template.Template
+	cmdMain                *template.Template
 }
 
 func (t *Template) Render(prefix string) error {
@@ -94,6 +101,10 @@ func (t *Template) Render(prefix string) error {
 
 	if err := render(t.internalServiceService, t.options, fmt.Sprintf("%v/internal/service/service.go", prefix)); err != nil {
 		return errors.Wrap(err, fmt.Sprintf("render %v/internal/service/service.go failed", prefix))
+	}
+
+	if err := render(t.cmdMain, t.options, fmt.Sprintf("%v/cmd/main.go", prefix)); err != nil {
+		return errors.Wrap(err, fmt.Sprintf("render %v/cmd/main.go failed", prefix))
 	}
 
 	return nil
