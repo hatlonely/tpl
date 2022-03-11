@@ -21,25 +21,39 @@ type Options struct {
 func NewTemplateWithOptions(options *Options) (*Template, error) {
 	tplMk, err := template.New("").Parse(tplMk)
 	if err != nil {
-		return nil, errors.Wrap(err, "template.New tplMk failed")
+		return nil, errors.Wrap(err, "template.New .tpl.mk failed")
 	}
 
 	makefile, err := template.New("").Parse(makefile)
 	if err != nil {
-		return nil, errors.Wrap(err, "template.New makefile failed")
+		return nil, errors.Wrap(err, "template.New Makefile failed")
+	}
+
+	dockerfile, err := template.New("").Parse(dockerfile)
+	if err != nil {
+		return nil, errors.Wrap(err, "template.New Dockerfile failed")
+	}
+
+	gitignore, err := template.New("").Parse(gitignore)
+	if err != nil {
+		return nil, errors.Wrap(err, "template.New Gitignore failed")
 	}
 
 	return &Template{
-		options:  options,
-		TplMk:    tplMk,
-		Makefile: makefile,
+		options:    options,
+		TplMk:      tplMk,
+		Makefile:   makefile,
+		Dockerfile: dockerfile,
+		Gitignore:  gitignore,
 	}, nil
 }
 
 type Template struct {
-	options  *Options
-	TplMk    *template.Template
-	Makefile *template.Template
+	options    *Options
+	TplMk      *template.Template
+	Makefile   *template.Template
+	Dockerfile *template.Template
+	Gitignore  *template.Template
 }
 
 func (t *Template) Render(prefix string) error {
@@ -47,8 +61,16 @@ func (t *Template) Render(prefix string) error {
 		return errors.Wrap(err, "render tplMK failed")
 	}
 
-	if err := render(t.TplMk, t.options, fmt.Sprintf("%v/Makefile", prefix)); err != nil {
+	if err := render(t.Makefile, t.options, fmt.Sprintf("%v/Makefile", prefix)); err != nil {
 		return errors.Wrap(err, "render Makefile failed")
+	}
+
+	if err := render(t.Dockerfile, t.options, fmt.Sprintf("%v/Dockerfile", prefix)); err != nil {
+		return errors.Wrap(err, "render Dockerfile failed")
+	}
+
+	if err := render(t.Dockerfile, t.options, fmt.Sprintf("%v/.gitignore", prefix)); err != nil {
+		return errors.Wrap(err, "render .gitignore failed")
 	}
 
 	return nil
