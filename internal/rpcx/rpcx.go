@@ -39,12 +39,15 @@ func NewTemplateWithOptions(options *Options) (*Template, error) {
 		return nil, errors.Wrap(err, "template.New Gitignore failed")
 	}
 
+	apiProto, err := template.New("").Parse(apiProto)
+
 	return &Template{
 		options:    options,
 		TplMk:      tplMk,
 		Makefile:   makefile,
 		Dockerfile: dockerfile,
 		Gitignore:  gitignore,
+		apiProto:   apiProto,
 	}, nil
 }
 
@@ -54,6 +57,7 @@ type Template struct {
 	Makefile   *template.Template
 	Dockerfile *template.Template
 	Gitignore  *template.Template
+	apiProto   *template.Template
 }
 
 func (t *Template) Render(prefix string) error {
@@ -69,8 +73,12 @@ func (t *Template) Render(prefix string) error {
 		return errors.Wrap(err, "render Dockerfile failed")
 	}
 
-	if err := render(t.Dockerfile, t.options, fmt.Sprintf("%v/.gitignore", prefix)); err != nil {
+	if err := render(t.Gitignore, t.options, fmt.Sprintf("%v/.gitignore", prefix)); err != nil {
 		return errors.Wrap(err, "render .gitignore failed")
+	}
+
+	if err := render(t.apiProto, t.options, fmt.Sprintf("%v/api/%v.proto", prefix, t.options.Name)); err != nil {
+		return errors.Wrap(err, fmt.Sprintf("render api/%v.proto failed", t.options.Name))
 	}
 
 	return nil

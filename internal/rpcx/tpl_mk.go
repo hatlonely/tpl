@@ -34,7 +34,7 @@ vendor: go.mod go.sum
 	go mod vendor
 
 .PHONY: codegen
-codegen: api/tool.proto
+codegen: api/{{ .Name }}.proto
 	if [ ! -z "$(shell docker ps --filter name=protobuf -q)" ]; then \
 		docker stop protobuf; \
 	fi
