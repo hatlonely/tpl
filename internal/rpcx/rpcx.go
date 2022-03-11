@@ -55,6 +55,11 @@ func NewTemplateWithOptions(options *Options) (*Template, error) {
 		return nil, errors.Wrap(err, "template.New cmd/main.go failed")
 	}
 
+	readmeMd, err := template.New("").Parse(readmeMd)
+	if err != nil {
+		return nil, errors.Wrap(err, "template.New README.md failed")
+	}
+
 	return &Template{
 		options:                options,
 		TplMk:                  tplMk,
@@ -64,6 +69,7 @@ func NewTemplateWithOptions(options *Options) (*Template, error) {
 		apiProto:               apiProto,
 		internalServiceService: internalServiceService,
 		cmdMain:                cmdMain,
+		readmeMd:               readmeMd,
 	}, nil
 }
 
@@ -76,6 +82,7 @@ type Template struct {
 	apiProto               *template.Template
 	internalServiceService *template.Template
 	cmdMain                *template.Template
+	readmeMd               *template.Template
 }
 
 func (t *Template) Render(prefix string) error {
@@ -105,6 +112,10 @@ func (t *Template) Render(prefix string) error {
 
 	if err := render(t.cmdMain, t.options, fmt.Sprintf("%v/cmd/main.go", prefix)); err != nil {
 		return errors.Wrap(err, fmt.Sprintf("render %v/cmd/main.go failed", prefix))
+	}
+
+	if err := render(t.readmeMd, t.options, fmt.Sprintf("%v/README.md", prefix)); err != nil {
+		return errors.Wrap(err, "render README.md failed")
 	}
 
 	return nil
