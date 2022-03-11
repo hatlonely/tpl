@@ -40,24 +40,34 @@ func NewTemplateWithOptions(options *Options) (*Template, error) {
 	}
 
 	apiProto, err := template.New("").Parse(apiProto)
+	if err != nil {
+		return nil, errors.Wrap(err, fmt.Sprintf("template.New api/%v.proto failed", options.Name))
+	}
+
+	internalServiceService, err := template.New("").Parse(internalServiceService)
+	if err != nil {
+		return nil, errors.Wrap(err, "template.New internal/service/service.go failed")
+	}
 
 	return &Template{
-		options:    options,
-		TplMk:      tplMk,
-		Makefile:   makefile,
-		Dockerfile: dockerfile,
-		Gitignore:  gitignore,
-		apiProto:   apiProto,
+		options:                options,
+		TplMk:                  tplMk,
+		Makefile:               makefile,
+		Dockerfile:             dockerfile,
+		Gitignore:              gitignore,
+		apiProto:               apiProto,
+		internalServiceService: internalServiceService,
 	}, nil
 }
 
 type Template struct {
-	options    *Options
-	TplMk      *template.Template
-	Makefile   *template.Template
-	Dockerfile *template.Template
-	Gitignore  *template.Template
-	apiProto   *template.Template
+	options                *Options
+	TplMk                  *template.Template
+	Makefile               *template.Template
+	Dockerfile             *template.Template
+	Gitignore              *template.Template
+	apiProto               *template.Template
+	internalServiceService *template.Template
 }
 
 func (t *Template) Render(prefix string) error {
@@ -79,6 +89,10 @@ func (t *Template) Render(prefix string) error {
 
 	if err := render(t.apiProto, t.options, fmt.Sprintf("%v/api/%v.proto", prefix, t.options.Name)); err != nil {
 		return errors.Wrap(err, fmt.Sprintf("render api/%v.proto failed", t.options.Name))
+	}
+
+	if err := render(t.internalServiceService, t.options, fmt.Sprintf("%v/internal/service/service.go", prefix)); err != nil {
+		return errors.Wrap(err, fmt.Sprintf("render %v/internal/service/service.go failed", prefix))
 	}
 
 	return nil
