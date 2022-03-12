@@ -13,7 +13,7 @@ go install github.com/hatlonely/tpl@v0.0.2
 ### docker 运行
 
 ```shell
-docker run -i --tty --rm -v $(pwd):/work docker.io/hatlonely/tpl:0.0.1 tpl -h
+docker run -i --tty --rm -v $(pwd):/work docker.io/hatlonely/tpl:0.0.2 tpl -h
 ```
 
 ## 快速入门
