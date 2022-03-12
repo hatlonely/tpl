@@ -17,12 +17,12 @@ env:
     REGISTRY_USERNAME: "{{ "{{ .registry.username }}" }}"
     REGISTRY_PASSWORD: "{{ "{{ .registry.password }}" }}"
     REGISTRY_NAMESPACE: "{{ "{{ .registry.namespace }}" }}"{{ if .Ops.EnableHelm }}
-    K8S_CONTEXT: "home-k8s"
-    NAMESPACE: "dev"
-    PULL_SECRET_NAME: "hatlonely-pull-secret"
-    REPLICA_COUNT: 2
-    INGRESS_HOST: "k8s.rpc.tool.hatlonely.com"
-    SECRET_NAME: "rpc-tool-tls"{{ if .Ops.EnableEsLog }}
+    K8S_CONTEXT: "k8s-test"
+    NAMESPACE: "default"
+    PULL_SECRET_NAME: "{{ .Name }}-pull-secret"
+    REPLICA_COUNT: 3
+    INGRESS_HOST: "example.com"
+    SECRET_NAME: "{{ .Name }}-tls"{{ if .Ops.EnableEsLog }}
     ELASTICSEARCH_ENDPOINT: "https://security-master:9200"
     ELASTICSEARCH_PASSWORD: "{{ "{{ .elasticsearch.password }}" }}"{{ end }}{{ if .Ops.EnableTrace }}
     JAEGER_SAMPLING_SERVER_URL: "http://jaeger-agent.monitoring:5778/sampling"
