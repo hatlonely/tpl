@@ -59,9 +59,9 @@ type Template struct {
 }
 
 func (t *Template) Render(prefix string) error {
-	for _, info := range t.tpls {
-		if err := render(info.Tpl, t.options, fmt.Sprintf("%v/%v", prefix, info.Out)); err != nil {
-			return errors.Wrapf(err, "render %v failed", info.Out)
+	for _, desc := range t.tpls {
+		if err := render(desc.Tpl, t.options, fmt.Sprintf("%v/%v", prefix, desc.Out)); err != nil {
+			return errors.Wrapf(err, "render %v failed", desc.Out)
 		}
 	}
 
