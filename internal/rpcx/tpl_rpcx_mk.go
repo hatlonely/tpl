@@ -1,15 +1,11 @@
 package rpcx
 
-var rpcxMk = `
-NAME ?= {{ .Name }}
+var rpcxMk = `NAME ?= {{ .Name }}
 REGISTRY_ENDPOINT ?= {{ .Registry.Endpoint }}
 REGISTRY_NAMESPACE ?= {{ .Registry.Namespace }}
-IMAGE_TAG ?= $(shell git describe --tags | awk '{print(substr($$0,2,length($$0)))}')
+VERSION ?= $(shell git describe --tags | awk '{print(substr($$0,2,length($$0)))}')
 
-{{ if .GoProxy }}
-export GOPROXY={{ .GoProxy }}
-{{ end }}
-
+{{ if .GoProxy }}export GOPROXY={{ .GoProxy }}{{ end }}
 define BUILD_VERSION
   version: $(shell git describe --tags)
 gitremote: $(shell git remote -v | grep fetch | awk '{print $$2}')
@@ -46,7 +42,6 @@ codegen: api/{{ .Name }}.proto
 	docker exec protobuf bash -c "cp api/gen/go/$(basename $<).pb.go api"
 	docker exec protobuf bash -c "protoc -I. --gotag_out=paths=source_relative:api/gen/go $<"
 	docker exec protobuf bash -c "protoc -I. --go-grpc_out api/gen/go --go-grpc_opt paths=source_relative $<"
-	#docker exec protobuf bash -c "protoc -Irpc-api -I. --gofast_out=plugins=grpc,paths=source_relative:api/gen/go $<"
 	docker exec protobuf bash -c "protoc -I. --grpc-gateway_out api/gen/go --grpc-gateway_opt logtostderr=true,paths=source_relative $<"
 	docker exec protobuf bash -c "protoc -I. --openapiv2_out api/gen/swagger --openapiv2_opt logtostderr=true $<"
 	docker cp protobuf:/api/gen api
@@ -54,5 +49,5 @@ codegen: api/{{ .Name }}.proto
 
 .PHONY: image
 image:
-	docker build --tag=${REGISTRY_ENDPOINT}/${REGISTRY_NAMESPACE}/${NAME}:${IMAGE_TAG} .
+	docker build --tag=${REGISTRY_ENDPOINT}/${REGISTRY_NAMESPACE}/${NAME}:${VERSION} .
 `
