@@ -45,11 +45,5 @@ service {{ .Service }}Service {
       body: "*"
     };
   }
-
-  rpc Ping(google.protobuf.Empty) returns (PingRes) {
-    option (google.api.http) = {
-      get: "/ping"
-    };
-  }
 }
 `
