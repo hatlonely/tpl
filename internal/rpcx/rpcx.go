@@ -33,20 +33,20 @@ func NewTemplateWithOptions(options *Options) (*Template, error) {
 	return &Template{
 		options: options,
 		tpls: []struct {
-			tpl string
-			out string
+			Tpl string
+			Out string
 		}{
-			{tpl: rpcxMk, out: ".rpcx.mk"},
-			{tpl: makefile, out: "Makefile"},
-			{tpl: dockerfile, out: "Dockerfile"},
-			{tpl: gitignore, out: ".gitignore"},
-			{tpl: apiProto, out: fmt.Sprintf("api/%v.proto", options.Name)},
-			{tpl: internalServiceService, out: "internal/service/service.go"},
-			{tpl: cmdMain, out: "cmd/main.go"},
-			{tpl: readmeMd, out: "README.md"},
-			{tpl: ConfigBaseJson, out: "config/base.json"},
-			{tpl: ConfigAppJson, out: "config/app.json"},
-			{tpl: opsYaml, out: ".ops.yaml"},
+			{Tpl: rpcxMk, Out: ".rpcx.mk"},
+			{Tpl: makefile, Out: "Makefile"},
+			{Tpl: dockerfile, Out: "Dockerfile"},
+			{Tpl: gitignore, Out: ".gitignore"},
+			{Tpl: apiProto, Out: fmt.Sprintf("api/%v.proto", options.Name)},
+			{Tpl: internalServiceService, Out: "internal/service/service.go"},
+			{Tpl: cmdMain, Out: "cmd/main.go"},
+			{Tpl: readmeMd, Out: "README.md"},
+			{Tpl: ConfigBaseJson, Out: "config/base.json"},
+			{Tpl: ConfigAppJson, Out: "config/app.json"},
+			{Tpl: opsYaml, Out: ".ops.yaml"},
 		},
 	}, nil
 }
@@ -54,15 +54,15 @@ func NewTemplateWithOptions(options *Options) (*Template, error) {
 type Template struct {
 	options *Options
 	tpls    []struct {
-		tpl string
-		out string
+		Tpl string
+		Out string
 	}
 }
 
 func (t *Template) Render(prefix string) error {
 	for _, info := range t.tpls {
-		if err := render(info.tpl, t.options, fmt.Sprintf("%v/%v", prefix, info.out)); err != nil {
-			return errors.Wrapf(err, "render %v failed", info.out)
+		if err := render(info.Tpl, t.options, fmt.Sprintf("%v/%v", prefix, info.Out)); err != nil {
+			return errors.Wrapf(err, "render %v failed", info.Out)
 		}
 	}
 
