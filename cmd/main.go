@@ -6,16 +6,17 @@ import (
 	"github.com/hatlonely/go-kit/flag"
 	"github.com/hatlonely/go-kit/refx"
 
-	"github.com/hatlonely/tpl/internal/rpcx"
+	"github.com/hatlonely/tpl/internal/tpl"
 )
 
 var Version string
 
 type Options struct {
-	flag.Options
+	Help       bool   `flag:"-h; usage: show help info"`
+	Version    bool   `flag:"-v; usage: show version"`
+	ConfigPath string `flag:"-c; usage: config path"`
 
-	Type string
-	Rpcx rpcx.Options
+	tpl.Options
 }
 
 func main() {
@@ -56,13 +57,7 @@ func main() {
 	//	},
 	//})
 
-	var tpl *rpcx.Template
-	var err error
-
-	switch options.Type {
-	case "rpcx":
-		tpl, err = rpcx.NewTemplateWithOptions(&options.Rpcx)
-	}
+	tpl, err := tpl.NewTemplateWithOptions(&options.Options)
 
 	if err != nil {
 		panic(err)
