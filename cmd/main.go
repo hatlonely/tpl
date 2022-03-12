@@ -52,12 +52,6 @@ func main() {
 	}
 
 	tpl, err := tpl.NewTemplateWithOptions(&options.Options)
-
-	if err != nil {
-		panic(err)
-	}
-
-	if err := tpl.Render("tmp"); err != nil {
-		panic(err)
-	}
+	refx.Must(err)
+	refx.Must(tpl.Render(options.Prefix))
 }
