@@ -27,4 +27,4 @@ vendor: go.mod go.sum
 
 .PHONY: image
 image:
-	docker build --tag=${REGISTRY_ENDPOINT}/${REGISTRY_NAMESPACE}/${NAME}:${VERSION} .
+	docker build --build-arg version="$${BUILD_VERSION}" --tag=${REGISTRY_ENDPOINT}/${REGISTRY_NAMESPACE}/${NAME}:${VERSION} .
