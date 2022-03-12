@@ -30,108 +30,49 @@ func NewTemplateWithOptions(options *Options) (*Template, error) {
 		options.EnvPrefix = strx.SnakeNameAllCaps(options.Name)
 	}
 
-	tplMk, err := template.New("").Parse(tplMk)
-	if err != nil {
-		return nil, errors.Wrap(err, "template.New .tpl.mk failed")
-	}
-
-	makefile, err := template.New("").Parse(makefile)
-	if err != nil {
-		return nil, errors.Wrap(err, "template.New Makefile failed")
-	}
-
-	dockerfile, err := template.New("").Parse(dockerfile)
-	if err != nil {
-		return nil, errors.Wrap(err, "template.New Dockerfile failed")
-	}
-
-	gitignore, err := template.New("").Parse(gitignore)
-	if err != nil {
-		return nil, errors.Wrap(err, "template.New .gitignore failed")
-	}
-
-	apiProto, err := template.New("").Parse(apiProto)
-	if err != nil {
-		return nil, errors.Wrap(err, fmt.Sprintf("template.New api/%v.proto failed", options.Name))
-	}
-
-	internalServiceService, err := template.New("").Parse(internalServiceService)
-	if err != nil {
-		return nil, errors.Wrap(err, "template.New internal/service/service.go failed")
-	}
-
-	cmdMain, err := template.New("").Parse(cmdMain)
-	if err != nil {
-		return nil, errors.Wrap(err, "template.New cmd/main.go failed")
-	}
-
-	readmeMd, err := template.New("").Parse(readmeMd)
-	if err != nil {
-		return nil, errors.Wrap(err, "template.New README.md failed")
-	}
-
 	return &Template{
-		options:                options,
-		tplMk:                  tplMk,
-		makefile:               makefile,
-		dockerfile:             dockerfile,
-		gitignore:              gitignore,
-		apiProto:               apiProto,
-		internalServiceService: internalServiceService,
-		cmdMain:                cmdMain,
-		readmeMd:               readmeMd,
+		options: options,
+		tpls: []struct {
+			tpl string
+			out string
+		}{
+			{tpl: tplMk, out: ".tpl.mk"},
+			{tpl: makefile, out: "Makefile"},
+			{tpl: dockerfile, out: "Dockerfile"},
+			{tpl: gitignore, out: ".gitignore"},
+			{tpl: apiProto, out: fmt.Sprintf("api/%v.proto", options.Name)},
+			{tpl: internalServiceService, out: "internal/service/service.go"},
+			{tpl: cmdMain, out: "cmd/main.go"},
+			{tpl: readmeMd, out: "README.md"},
+			{tpl: ConfigBaseJson, out: "config/base.json"},
+		},
 	}, nil
 }
 
 type Template struct {
-	options                *Options
-	tplMk                  *template.Template
-	makefile               *template.Template
-	dockerfile             *template.Template
-	gitignore              *template.Template
-	apiProto               *template.Template
-	internalServiceService *template.Template
-	cmdMain                *template.Template
-	readmeMd               *template.Template
+	options *Options
+	tpls    []struct {
+		tpl string
+		out string
+	}
 }
 
 func (t *Template) Render(prefix string) error {
-	if err := render(t.tplMk, t.options, fmt.Sprintf("%v/.tpl.mk", prefix)); err != nil {
-		return errors.Wrap(err, "render tplMK failed")
-	}
-
-	if err := render(t.makefile, t.options, fmt.Sprintf("%v/Makefile", prefix)); err != nil {
-		return errors.Wrap(err, "render makefile failed")
-	}
-
-	if err := render(t.dockerfile, t.options, fmt.Sprintf("%v/Dockerfile", prefix)); err != nil {
-		return errors.Wrap(err, "render dockerfile failed")
-	}
-
-	if err := render(t.gitignore, t.options, fmt.Sprintf("%v/.gitignore", prefix)); err != nil {
-		return errors.Wrap(err, "render .gitignore failed")
-	}
-
-	if err := render(t.apiProto, t.options, fmt.Sprintf("%v/api/%v.proto", prefix, t.options.Name)); err != nil {
-		return errors.Wrap(err, fmt.Sprintf("render api/%v.proto failed", t.options.Name))
-	}
-
-	if err := render(t.internalServiceService, t.options, fmt.Sprintf("%v/internal/service/service.go", prefix)); err != nil {
-		return errors.Wrap(err, fmt.Sprintf("render %v/internal/service/service.go failed", prefix))
-	}
-
-	if err := render(t.cmdMain, t.options, fmt.Sprintf("%v/cmd/main.go", prefix)); err != nil {
-		return errors.Wrap(err, fmt.Sprintf("render %v/cmd/main.go failed", prefix))
-	}
-
-	if err := render(t.readmeMd, t.options, fmt.Sprintf("%v/README.md", prefix)); err != nil {
-		return errors.Wrap(err, "render README.md failed")
+	for _, info := range t.tpls {
+		if err := render(info.tpl, t.options, fmt.Sprintf("%v/%v", prefix, info.out)); err != nil {
+			return errors.Wrapf(err, "render %v failed", info.out)
+		}
 	}
 
 	return nil
 }
 
-func render(tpl *template.Template, options *Options, out string) error {
+func render(ts string, options *Options, out string) error {
+	tpl, err := template.New("").Parse(ts)
+	if err != nil {
+		return errors.Wrap(err, "template.New failed")
+	}
+
 	abs, err := filepath.Abs(out)
 	if err != nil {
 		return errors.Wrap(err, "filepath.Abs failed")
