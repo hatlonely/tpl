@@ -28,7 +28,6 @@ env:
     JAEGER_SAMPLING_SERVER_URL: "http://jaeger-agent.monitoring:5778/sampling"
     JAEGER_REPORTER_LOCAL_AGENT_HOST_PORT: "jaeger-agent.monitoring:6831"{{ end }}{{ end }}
 
-
 task:
   image:
     step:
