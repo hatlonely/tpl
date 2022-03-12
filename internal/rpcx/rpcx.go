@@ -11,13 +11,13 @@ import (
 )
 
 type Options struct {
-	Name      string
-	Package   string
-	Service   string
-	EnvPrefix string
+	Name      string `flag:"usage: project name"`
+	Package   string `flag:"usage: package name"`
+	Service   string `flag:"usage: service name, use pascal Name if not specific"`
+	EnvPrefix string `flag:"usage: environment prefix, use all caps snake Name if not specific"`
 	Registry  struct {
-		Endpoint  string `dft:"docker.io"`
-		Namespace string
+		Endpoint  string `flag:"usage: docker registry endpoint" dft:"docker.io"`
+		Namespace string `flag:"usage: docker registry namespace"`
 	}
 	GoProxy   string
 	EnableOps bool
