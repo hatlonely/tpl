@@ -16,7 +16,7 @@ type Options struct {
 	Service   string `flag:"usage: service name, use pascal Name if not specific"`
 	EnvPrefix string `flag:"usage: environment prefix, use all caps snake Name if not specific"`
 	Registry  struct {
-		Endpoint  string `flag:"usage: docker registry endpoint" dft:"docker.io"`
+		Endpoint  string `flag:"usage: docker registry endpoint; default: docker.io"`
 		Namespace string `flag:"usage: docker registry namespace"`
 	}
 	GoProxy   string `flag:"usage: set go proxy in Makefile"`
@@ -30,6 +30,12 @@ type Options struct {
 }
 
 func NewTemplateWithOptions(options *Options) (*Template, error) {
+	if options.Name == "" {
+		return nil, errors.New("miss required field [Name]")
+	}
+	if options.Package == "" {
+		return nil, errors.New("miss required field [Package]")
+	}
 	if options.Service == "" {
 		options.Service = strx.PascalName(options.Name)
 	}
