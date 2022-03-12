@@ -32,7 +32,7 @@ message PingRes {
   string Message = 1;
 }
 
-service ExampleService {
+service {{ .Service }}Service {
   rpc Echo(EchoReq) returns (EchoRes) {
     option (google.api.http) = {
       get: "/v1/echo"

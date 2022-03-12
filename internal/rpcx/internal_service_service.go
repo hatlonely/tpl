@@ -20,19 +20,19 @@ type Options struct {
 	SleepTime time.Duration
 }
 
-func NewExampleServiceWithOptions(options *Options) (*ExampleService, error) {
-	return &ExampleService{
+func New{{ .Service }}ServiceWithOptions(options *Options) (*{{ .Service }}Service, error) {
+	return &{{ .Service }}Service{
 		options: options,
 	}, nil
 }
 
-type ExampleService struct {
-	api.ExampleServiceServer
+type {{ .Service }}Service struct {
+	api.{{ .Service }}ServiceServer
 
 	options *Options
 }
 
-func (s *ExampleService) Echo(ctx context.Context, req *api.EchoReq) (*api.EchoRes, error) {
+func (s *{{ .Service }}Service) Echo(ctx context.Context, req *api.EchoReq) (*api.EchoRes, error) {
 	time.Sleep(s.options.SleepTime)
 
 	header := metadata.Pairs("Location", "https://www.baidu.com")
@@ -45,7 +45,7 @@ func (s *ExampleService) Echo(ctx context.Context, req *api.EchoReq) (*api.EchoR
 	}, nil
 }
 
-func (s *ExampleService) Add(ctx context.Context, req *api.AddReq) (*api.AddRes, error) {
+func (s *{{ .Service }}Service) Add(ctx context.Context, req *api.AddReq) (*api.AddRes, error) {
 	time.Sleep(s.options.SleepTime)
 
 	if req.I1 > 100 || req.I2 > 100 {

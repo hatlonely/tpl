@@ -6,12 +6,14 @@ import (
 	"path/filepath"
 	"text/template"
 
+	"github.com/hatlonely/go-kit/strx"
 	"github.com/pkg/errors"
 )
 
 type Options struct {
 	Name     string
 	Package  string
+	Service  string
 	Registry struct {
 		Endpoint  string `dft:"docker.io"`
 		Namespace string
@@ -20,6 +22,10 @@ type Options struct {
 }
 
 func NewTemplateWithOptions(options *Options) (*Template, error) {
+	if options.Service == "" {
+		options.Service = strx.PascalName(options.Name)
+	}
+
 	tplMk, err := template.New("").Parse(tplMk)
 	if err != nil {
 		return nil, errors.Wrap(err, "template.New .tpl.mk failed")

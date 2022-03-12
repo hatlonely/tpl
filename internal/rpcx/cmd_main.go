@@ -55,7 +55,7 @@ func main() {
 	refx.Must(err)
 
 	refx.Must(bind.Bind(&options, []bind.Getter{
-		flag.Instance(), bind.NewEnvGetter(bind.WithEnvPrefix("EXAMPLE")), cfg,
+		flag.Instance(), bind.NewEnvGetter(bind.WithEnvPrefix("{{ .Service }}")), cfg,
 	}, refx.WithCamelName()))
 
 	grpcLog, err := logger.NewLoggerWithOptions(&options.Logger.Grpc, refx.WithCamelName())
@@ -68,15 +68,15 @@ func main() {
 	refx.Must(cfg.Watch())
 	defer cfg.Stop()
 
-	svc, err := service.NewExampleServiceWithOptions(&options.Service)
+	svc, err := service.New{{ .Service }}ServiceWithOptions(&options.Service)
 	refx.Must(err)
 
 	grpcGateway, err := rpcx.NewGrpcGatewayWithOptions(&options.GrpcGateway, refx.WithCamelName())
 	refx.Must(err)
 	grpcGateway.SetLogger(infoLog, grpcLog)
 
-	api.RegisterExampleServiceServer(grpcGateway.GRPCServer(), svc)
-	refx.Must(grpcGateway.RegisterServiceHandlerFunc(api.RegisterExampleServiceHandlerFromEndpoint))
+	api.Register{{ .Service }}ServiceServer(grpcGateway.GRPCServer(), svc)
+	refx.Must(grpcGateway.RegisterServiceHandlerFunc(api.Register{{ .Service }}ServiceHandlerFromEndpoint))
 	grpcGateway.Run()
 
 	stop := make(chan os.Signal, 1)
