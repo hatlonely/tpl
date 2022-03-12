@@ -5,7 +5,7 @@ ARG version
 
 COPY . /go/src/
 WORKDIR /go/src/
-RUN go build -ldflags "-X 'main.Version=$version'" -o tpl cmd/main.go
+RUN go build -ldflags "-X 'main.Version=$version'" -o tpl main.go
 
 FROM alpine:3.15.0
 

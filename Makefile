@@ -14,8 +14,8 @@ endef
 export BUILD_VERSION
 
 .PHONY: build
-build: cmd/main.go $(wildcard internal/*/*.go) Makefile vendor
-	go build -ldflags "-X 'main.Version=$$BUILD_VERSION'" -o build/bin/${NAME} cmd/main.go
+build: main.go $(wildcard internal/*/*.go) Makefile vendor
+	go build -ldflags "-X 'main.Version=$$BUILD_VERSION'" -o build/bin/${NAME} main.go
 
 .PHONY: clean
 clean:
