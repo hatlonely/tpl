@@ -1,5 +1,5 @@
 package rpcx
 
 var makefile = `
-include .tpl.mk
+include .rpcx.mk
 `

@@ -1,6 +1,6 @@
 package rpcx
 
-var tplMk = `
+var rpcxMk = `
 NAME ?= {{ .Name }}
 REGISTRY_ENDPOINT ?= {{ .Registry.Endpoint }}
 REGISTRY_NAMESPACE ?= {{ .Registry.Namespace }}

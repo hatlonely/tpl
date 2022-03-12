@@ -36,7 +36,7 @@ func NewTemplateWithOptions(options *Options) (*Template, error) {
 			tpl string
 			out string
 		}{
-			{tpl: tplMk, out: ".tpl.mk"},
+			{tpl: rpcxMk, out: ".rpcx.mk"},
 			{tpl: makefile, out: "Makefile"},
 			{tpl: dockerfile, out: "Dockerfile"},
 			{tpl: gitignore, out: ".gitignore"},
