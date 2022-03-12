@@ -19,10 +19,10 @@ type Options struct {
 		Endpoint  string `flag:"usage: docker registry endpoint" dft:"docker.io"`
 		Namespace string `flag:"usage: docker registry namespace"`
 	}
-	GoProxy   string
-	EnableOps bool
+	GoProxy   string `flag:"usage: set go proxy in Makefile"`
+	EnableOps bool   `flag:"usage: generate .ops.yaml"`
 	Ops       struct {
-		EnableHelm  bool
+		EnableHelm  bool `flag:"usage: enable helm task"`
 		EnableTrace bool
 		EnableCors  bool
 		EnableEsLog bool
