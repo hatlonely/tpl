@@ -19,7 +19,8 @@ type Options struct {
 		Endpoint  string `dft:"docker.io"`
 		Namespace string
 	}
-	GoProxy string
+	GoProxy    string
+	DisableOps bool
 }
 
 func NewTemplateWithOptions(options *Options) (*Template, error) {
@@ -43,14 +44,15 @@ func NewTemplateWithOptions(options *Options) (*Template, error) {
 			{Tpl: readmeMd, Out: "README.md"},
 			{Tpl: ConfigBaseJson, Out: "config/base.json"},
 			{Tpl: ConfigAppJson, Out: "config/app.json"},
-			{Tpl: opsYaml, Out: ".ops.yaml"},
+			{Tpl: opsYaml, Out: ".ops.yaml", Disable: options.DisableOps},
 		},
 	}, nil
 }
 
 type TplDesc struct {
-	Tpl string
-	Out string
+	Tpl     string
+	Out     string
+	Disable bool
 }
 
 type Template struct {
@@ -60,6 +62,9 @@ type Template struct {
 
 func (t *Template) Render(prefix string) error {
 	for _, desc := range t.tpls {
+		if desc.Disable {
+			continue
+		}
 		if err := render(desc.Tpl, t.options, fmt.Sprintf("%v/%v", prefix, desc.Out)); err != nil {
 			return errors.Wrapf(err, "render %v failed", desc.Out)
 		}
