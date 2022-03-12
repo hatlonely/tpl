@@ -1,7 +1,6 @@
 package rpcx
 
-var ConfigBaseJson = `
-{
+var ConfigBaseJson = `{
   "decoder": {
 	"type": "Json"
   },

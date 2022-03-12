@@ -45,6 +45,7 @@ func NewTemplateWithOptions(options *Options) (*Template, error) {
 			{tpl: cmdMain, out: "cmd/main.go"},
 			{tpl: readmeMd, out: "README.md"},
 			{tpl: ConfigBaseJson, out: "config/base.json"},
+			{tpl: ConfigAppJson, out: "config/app.json"},
 		},
 	}, nil
 }
