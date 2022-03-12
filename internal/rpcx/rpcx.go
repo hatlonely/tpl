@@ -32,10 +32,7 @@ func NewTemplateWithOptions(options *Options) (*Template, error) {
 
 	return &Template{
 		options: options,
-		tpls: []struct {
-			Tpl string
-			Out string
-		}{
+		tpls: []TplDesc{
 			{Tpl: rpcxMk, Out: ".rpcx.mk"},
 			{Tpl: makefile, Out: "Makefile"},
 			{Tpl: dockerfile, Out: "Dockerfile"},
@@ -51,12 +48,14 @@ func NewTemplateWithOptions(options *Options) (*Template, error) {
 	}, nil
 }
 
+type TplDesc struct {
+	Tpl string
+	Out string
+}
+
 type Template struct {
 	options *Options
-	tpls    []struct {
-		Tpl string
-		Out string
-	}
+	tpls    []TplDesc
 }
 
 func (t *Template) Render(prefix string) error {
