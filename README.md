@@ -7,7 +7,7 @@
 ### go install
 
 ```shell
-go install github.com/hatlonely/tpl
+go install github.com/hatlonely/tpl@v0.0.1
 ```
 
 ### docker 运行
