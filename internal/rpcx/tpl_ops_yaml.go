@@ -1,7 +1,6 @@
 package rpcx
 
-var opsYaml = `
-name: {{ .Name }}
+var opsYaml = `name: {{ .Name }}
 
 dep:
   ops:
@@ -17,15 +16,17 @@ env:
     REGISTRY_ENDPOINT: "{{ "{{ .registry.endpoint }}" }}"
     REGISTRY_USERNAME: "{{ "{{ .registry.username }}" }}"
     REGISTRY_PASSWORD: "{{ "{{ .registry.password }}" }}"
-    REGISTRY_NAMESPACE: "{{ "{{ .registry.namespace }}" }}"
-    {{ if not .Ops.EnableHelm }}
+    REGISTRY_NAMESPACE: "{{ "{{ .registry.namespace }}" }}"{{ if .Ops.EnableHelm }}
     K8S_CONTEXT: "home-k8s"
     NAMESPACE: "dev"
     PULL_SECRET_NAME: "hatlonely-pull-secret"
     REPLICA_COUNT: 2
     INGRESS_HOST: "k8s.rpc.tool.hatlonely.com"
-    SECRET_NAME: "rpc-tool-tls"
-    {{ end }}
+    SECRET_NAME: "rpc-tool-tls"{{ if .Ops.EnableEsLog }}
+    ELASTICSEARCH_ENDPOINT: "https://security-master:9200"
+    ELASTICSEARCH_PASSWORD: "{{ "{{ .elasticsearch.password }}" }}"{{ end }}{{ if .Ops.EnableTrace }}
+    JAEGER_SAMPLING_SERVER_URL: "http://jaeger-agent.monitoring:5778/sampling"
+    JAEGER_REPORTER_LOCAL_AGENT_HOST_PORT: "jaeger-agent.monitoring:6831"{{ end }}{{ end }}
 
 
 task:
@@ -33,8 +34,7 @@ task:
     step:
       - make image
       - docker login --username="${REGISTRY_USERNAME}" --password="${REGISTRY_PASSWORD}" "${REGISTRY_ENDPOINT}"
-      - docker push "${REGISTRY_ENDPOINT}/${REGISTRY_NAMESPACE}/${NAME}:${VERSION}"
-  {{ if not .Ops.EnableHelm }}
+      - docker push "${REGISTRY_ENDPOINT}/${REGISTRY_NAMESPACE}/${NAME}:${VERSION}"{{ if .Ops.EnableHelm }}
   helm:
     args:
       cmd:
@@ -51,6 +51,5 @@ task:
           "install") helm install "${NAME}" -n "${NAMESPACE}" "${TMP}/helm/${NAME}" -f "${TMP}/helm/${NAME}/values-adapter.yaml";;
           "upgrade") helm upgrade "${NAME}" -n "${NAMESPACE}" "${TMP}/helm/${NAME}" -f "${TMP}/helm/${NAME}/values-adapter.yaml";;
           "delete") helm delete "${NAME}" -n "${NAMESPACE}";;
-        esac
-  {{ end }}
+        esac{{ end }}
 `

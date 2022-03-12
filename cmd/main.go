@@ -24,9 +24,9 @@ func main() {
 			EnableEsLog bool
 		}{
 			EnableHelm:  true,
-			EnableTrace: false,
+			EnableTrace: true,
 			EnableCors:  false,
-			EnableEsLog: false,
+			EnableEsLog: true,
 		},
 	})
 
