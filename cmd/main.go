@@ -31,6 +31,8 @@ func main() {
 	refx.Must(flag.Parse(flag.WithJsonVal()))
 	if options.Help {
 		fmt.Println(flag.Usage())
+		fmt.Println(`Examples:
+  tpl --type rpcx --rpcx.name rpc-demo --rpcx.package github.com/hatlonely/rpcx-demo`)
 		return
 	}
 	if options.Version {
