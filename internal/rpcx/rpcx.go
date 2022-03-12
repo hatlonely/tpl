@@ -46,6 +46,7 @@ func NewTemplateWithOptions(options *Options) (*Template, error) {
 			{tpl: readmeMd, out: "README.md"},
 			{tpl: ConfigBaseJson, out: "config/base.json"},
 			{tpl: ConfigAppJson, out: "config/app.json"},
+			{tpl: opsYaml, out: ".ops.yaml"},
 		},
 	}, nil
 }

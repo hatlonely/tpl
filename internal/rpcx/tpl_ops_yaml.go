@@ -1,1 +1,5 @@
 package rpcx
+
+var opsYaml = `
+
+`
