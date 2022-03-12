@@ -4,8 +4,16 @@ tpl 是一个
 
 ## 安装
 
+### go install
+
 ```shell
 go install github.com/hatlonely/tpl
+```
+
+### docker 运行
+
+```shell
+docker run -i --tty --rm -v $(pwd):/ docker.io/hatlonely/tpl:0.0.1 tpl -h
 ```
 
 ## 快速入门
