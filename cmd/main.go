@@ -51,7 +51,7 @@ func main() {
 		refx.Must(yaml.Unmarshal(buf, &options.Options))
 	}
 
-	tpl, err := tpl.NewTemplateWithOptions(&options.Options)
+	t, err := tpl.NewTemplateWithOptions(&options.Options)
 	refx.Must(err)
-	refx.Must(tpl.Render(options.Prefix))
+	refx.Must(t.Render(options.Prefix))
 }
