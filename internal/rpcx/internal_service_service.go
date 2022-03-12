@@ -27,7 +27,7 @@ func New{{ .Service }}ServiceWithOptions(options *Options) (*{{ .Service }}Servi
 }
 
 type {{ .Service }}Service struct {
-	api.{{ .Service }}ServiceServer
+	api.Unsafe{{ .Service }}ServiceServer
 
 	options *Options
 }

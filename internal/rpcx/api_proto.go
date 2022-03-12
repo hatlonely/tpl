@@ -7,7 +7,6 @@ package api;
 
 option go_package = "{{ .Package }}/api/gen/go/api";
 
-import "google/protobuf/empty.proto";
 import "google/api/annotations.proto";
 import "tagger/tagger.proto";
 
