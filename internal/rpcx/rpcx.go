@@ -15,6 +15,7 @@ type Options struct {
 	Package   string `flag:"usage: package name"`
 	Service   string `flag:"usage: service name, use pascal Name if not specific"`
 	EnvPrefix string `flag:"usage: environment prefix, use all caps snake Name if not specific"`
+	ImageType string `flag:"usage: image type, centos|alpine; default: alpine"`
 	Registry  struct {
 		Endpoint  string `flag:"usage: docker registry endpoint; default: docker.io"`
 		Namespace string `flag:"usage: docker registry namespace"`

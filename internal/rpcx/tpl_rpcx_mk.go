@@ -18,7 +18,7 @@ export BUILD_VERSION
 
 .PHONY: build
 build: cmd/main.go $(wildcard internal/*/*.go) Makefile vendor
-	mkdir -p build/bin && mkdir -p build/config
+	mkdir -p build/bin && mkdir -p build/config && cp config/* build/config
 	go build -ldflags "-X 'main.Version=$$BUILD_VERSION'" -o build/bin/${NAME} cmd/main.go
 
 .PHONY: clean
@@ -49,5 +49,5 @@ codegen: api/{{ .Name }}.proto
 
 .PHONY: image
 image:
-	docker build --tag=${REGISTRY_ENDPOINT}/${REGISTRY_NAMESPACE}/${NAME}:${VERSION} .
+	docker build --build-arg version="$${BUILD_VERSION}" --tag=${REGISTRY_ENDPOINT}/${REGISTRY_NAMESPACE}/${NAME}:${VERSION} .
 `
