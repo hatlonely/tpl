@@ -47,7 +47,7 @@ func NewTemplateWithOptions(options *Options) (*Template, error) {
 
 	gitignore, err := template.New("").Parse(gitignore)
 	if err != nil {
-		return nil, errors.Wrap(err, "template.New Gitignore failed")
+		return nil, errors.Wrap(err, "template.New .gitignore failed")
 	}
 
 	apiProto, err := template.New("").Parse(apiProto)
@@ -72,10 +72,10 @@ func NewTemplateWithOptions(options *Options) (*Template, error) {
 
 	return &Template{
 		options:                options,
-		TplMk:                  tplMk,
-		Makefile:               makefile,
-		Dockerfile:             dockerfile,
-		Gitignore:              gitignore,
+		tplMk:                  tplMk,
+		makefile:               makefile,
+		dockerfile:             dockerfile,
+		gitignore:              gitignore,
 		apiProto:               apiProto,
 		internalServiceService: internalServiceService,
 		cmdMain:                cmdMain,
@@ -85,10 +85,10 @@ func NewTemplateWithOptions(options *Options) (*Template, error) {
 
 type Template struct {
 	options                *Options
-	TplMk                  *template.Template
-	Makefile               *template.Template
-	Dockerfile             *template.Template
-	Gitignore              *template.Template
+	tplMk                  *template.Template
+	makefile               *template.Template
+	dockerfile             *template.Template
+	gitignore              *template.Template
 	apiProto               *template.Template
 	internalServiceService *template.Template
 	cmdMain                *template.Template
@@ -96,19 +96,19 @@ type Template struct {
 }
 
 func (t *Template) Render(prefix string) error {
-	if err := render(t.TplMk, t.options, fmt.Sprintf("%v/.tpl.mk", prefix)); err != nil {
+	if err := render(t.tplMk, t.options, fmt.Sprintf("%v/.tpl.mk", prefix)); err != nil {
 		return errors.Wrap(err, "render tplMK failed")
 	}
 
-	if err := render(t.Makefile, t.options, fmt.Sprintf("%v/Makefile", prefix)); err != nil {
-		return errors.Wrap(err, "render Makefile failed")
+	if err := render(t.makefile, t.options, fmt.Sprintf("%v/Makefile", prefix)); err != nil {
+		return errors.Wrap(err, "render makefile failed")
 	}
 
-	if err := render(t.Dockerfile, t.options, fmt.Sprintf("%v/Dockerfile", prefix)); err != nil {
-		return errors.Wrap(err, "render Dockerfile failed")
+	if err := render(t.dockerfile, t.options, fmt.Sprintf("%v/Dockerfile", prefix)); err != nil {
+		return errors.Wrap(err, "render dockerfile failed")
 	}
 
-	if err := render(t.Gitignore, t.options, fmt.Sprintf("%v/.gitignore", prefix)); err != nil {
+	if err := render(t.gitignore, t.options, fmt.Sprintf("%v/.gitignore", prefix)); err != nil {
 		return errors.Wrap(err, "render .gitignore failed")
 	}
 
@@ -144,10 +144,10 @@ func render(tpl *template.Template, options *Options, out string) error {
 		return errors.Wrap(err, "os.Open failed")
 	}
 	if err := tpl.Execute(fp, options); err != nil {
-		return errors.Wrap(err, "t.TplMk.Execute failed")
+		return errors.Wrap(err, "tpl.Execute failed")
 	}
 	if err := fp.Close(); err != nil {
-		return errors.Wrap(err, "")
+		return errors.Wrap(err, "close failed")
 	}
 
 	return nil
