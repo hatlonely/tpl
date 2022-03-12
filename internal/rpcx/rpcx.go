@@ -19,9 +19,9 @@ type Options struct {
 		Endpoint  string `dft:"docker.io"`
 		Namespace string
 	}
-	GoProxy    string
-	DisableOps bool
-	Ops        struct {
+	GoProxy   string
+	EnableOps bool
+	Ops       struct {
 		EnableHelm  bool
 		EnableTrace bool
 		EnableCors  bool
@@ -50,8 +50,8 @@ func NewTemplateWithOptions(options *Options) (*Template, error) {
 			{Tpl: readmeMd, Out: "README.md"},
 			{Tpl: ConfigBaseJson, Out: "config/base.json"},
 			{Tpl: ConfigAppJson, Out: "config/app.json"},
-			{Tpl: opsYaml, Out: ".ops.yaml", Disable: options.DisableOps},
-			{Tpl: opsHelmValuesAdapterYaml, Out: "ops/helm/values-adapter.yaml", Disable: options.DisableOps || !options.Ops.EnableHelm},
+			{Tpl: opsYaml, Out: ".ops.yaml", Disable: !options.EnableOps},
+			{Tpl: opsHelmValuesAdapterYaml, Out: "ops/helm/values-adapter.yaml", Disable: !options.EnableOps || !options.Ops.EnableHelm},
 		},
 	}, nil
 }
