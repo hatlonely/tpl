@@ -15,7 +15,19 @@ func main() {
 			Endpoint:  "docker.io",
 			Namespace: "hatlonely",
 		},
-		GoProxy: "https://goproxy.cn",
+		GoProxy:    "https://goproxy.cn",
+		DisableOps: false,
+		Ops: struct {
+			EnableHelm  bool
+			EnableTrace bool
+			EnableCors  bool
+			EnableEsLog bool
+		}{
+			EnableHelm:  true,
+			EnableTrace: false,
+			EnableCors:  false,
+			EnableEsLog: false,
+		},
 	})
 
 	if err != nil {

@@ -14,11 +14,19 @@ env:
     NAME: "{{ .Name }}"
 	GIT_TAG: "$(git describe --tags)"
     VERSION: "$(git describe --tags | awk '{print(substr($0,2,length($0)))}')"
-  dev:
     REGISTRY_ENDPOINT: "{{ "{{ .registry.endpoint }}" }}"
     REGISTRY_USERNAME: "{{ "{{ .registry.username }}" }}"
     REGISTRY_PASSWORD: "{{ "{{ .registry.password }}" }}"
     REGISTRY_NAMESPACE: "{{ "{{ .registry.namespace }}" }}"
+    {{ if not .Ops.EnableHelm }}
+    K8S_CONTEXT: "home-k8s"
+    NAMESPACE: "dev"
+    PULL_SECRET_NAME: "hatlonely-pull-secret"
+    REPLICA_COUNT: 2
+    INGRESS_HOST: "k8s.rpc.tool.hatlonely.com"
+    SECRET_NAME: "rpc-tool-tls"
+    {{ end }}
+
 
 task:
   image:
@@ -26,6 +34,7 @@ task:
       - make image
       - docker login --username="${REGISTRY_USERNAME}" --password="${REGISTRY_PASSWORD}" "${REGISTRY_ENDPOINT}"
       - docker push "${REGISTRY_ENDPOINT}/${REGISTRY_NAMESPACE}/${NAME}:${VERSION}"
+  {{ if not .Ops.EnableHelm }}
   helm:
     args:
       cmd:
@@ -43,5 +52,5 @@ task:
           "upgrade") helm upgrade "${NAME}" -n "${NAMESPACE}" "${TMP}/helm/${NAME}" -f "${TMP}/helm/${NAME}/values-adapter.yaml";;
           "delete") helm delete "${NAME}" -n "${NAMESPACE}";;
         esac
-
+  {{ end }}
 `

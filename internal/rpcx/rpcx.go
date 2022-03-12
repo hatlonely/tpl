@@ -21,6 +21,12 @@ type Options struct {
 	}
 	GoProxy    string
 	DisableOps bool
+	Ops        struct {
+		EnableHelm  bool
+		EnableTrace bool
+		EnableCors  bool
+		EnableEsLog bool
+	}
 }
 
 func NewTemplateWithOptions(options *Options) (*Template, error) {
@@ -45,6 +51,7 @@ func NewTemplateWithOptions(options *Options) (*Template, error) {
 			{Tpl: ConfigBaseJson, Out: "config/base.json"},
 			{Tpl: ConfigAppJson, Out: "config/app.json"},
 			{Tpl: opsYaml, Out: ".ops.yaml", Disable: options.DisableOps},
+			{Tpl: opsHelmValuesAdapterYaml, Out: "ops/helm/values-adapter.yaml", Disable: options.DisableOps || !options.Ops.EnableHelm},
 		},
 	}, nil
 }
