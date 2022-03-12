@@ -11,10 +11,11 @@ import (
 )
 
 type Options struct {
-	Name     string
-	Package  string
-	Service  string
-	Registry struct {
+	Name      string
+	Package   string
+	Service   string
+	EnvPrefix string
+	Registry  struct {
 		Endpoint  string `dft:"docker.io"`
 		Namespace string
 	}
@@ -24,6 +25,9 @@ type Options struct {
 func NewTemplateWithOptions(options *Options) (*Template, error) {
 	if options.Service == "" {
 		options.Service = strx.PascalName(options.Name)
+	}
+	if options.EnvPrefix == "" {
+		options.EnvPrefix = strx.SnakeNameAllCaps(options.Name)
 	}
 
 	tplMk, err := template.New("").Parse(tplMk)
