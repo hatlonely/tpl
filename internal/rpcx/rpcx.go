@@ -58,6 +58,7 @@ func NewTemplateWithOptions(options *Options) (*Template, error) {
 			{Tpl: ConfigBaseJson, Out: "config/base.json"},
 			{Tpl: ConfigAppJson, Out: "config/app.json"},
 			{Tpl: opsYaml, Out: ".ops.yaml", Disable: !options.EnableOps},
+			{Tpl: rpcxOpsYaml, Out: ".rpcx.ops.yaml"},
 			{Tpl: opsHelmValuesAdapterYaml, Out: "ops/helm/values-adapter.yaml", Disable: !options.EnableOps || !options.Ops.EnableHelm},
 		},
 	}, nil
