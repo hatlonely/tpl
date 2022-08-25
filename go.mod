@@ -1,6 +1,6 @@
 module github.com/hatlonely/tpl
 
-go 1.17
+go 1.16
 
 require (
 	github.com/hatlonely/go-kit v1.1.2
