@@ -28,6 +28,7 @@ type Options struct {
 		EnableCors  bool
 		EnableEsLog bool
 	}
+	Editable map[string]bool `flag:"usage: recreate if exist"`
 }
 
 func NewTemplateWithOptions(options *Options) (*Template, error) {
@@ -43,6 +44,31 @@ func NewTemplateWithOptions(options *Options) (*Template, error) {
 	if options.EnvPrefix == "" {
 		options.EnvPrefix = strx.SnakeNameAllCaps(options.Name)
 	}
+
+	if options.Editable == nil {
+		options.Editable = map[string]bool{}
+	}
+	for key, val := range map[string]bool{
+		".rpcx.mk":                     true,
+		"Dockerfile":                   true,
+		"cmd/main.go":                  true,
+		"config/base.json":             true,
+		"Makefile":                     false,
+		".gitignore":                   false,
+		"internal/service/service.go":  false,
+		"README.md":                    false,
+		"config/app.json":              false,
+		".ops.yaml":                    false,
+		"ops/helm/values-adapter.yaml": false,
+		fmt.Sprintf("api/%v.proto", options.Name): false,
+	} {
+		if _, ok := options.Editable[key]; ok {
+			continue
+		}
+		options.Editable[key] = val
+	}
+
+	fmt.Println(options.Editable)
 
 	return &Template{
 		options: options,
@@ -89,11 +115,10 @@ func (t *Template) Render(prefix string) error {
 }
 
 func render(ts string, options *Options, out string) error {
-	tpl, err := template.New("").Parse(ts)
-	if err != nil {
-		return errors.Wrap(err, "template.New failed")
+	if _, err := os.Stat(out); !os.IsNotExist(err) && !options.Editable[out] {
+		fmt.Printf("skip %v\n", out)
+		return nil
 	}
-
 	abs, err := filepath.Abs(out)
 	if err != nil {
 		return errors.Wrap(err, "filepath.Abs failed")
@@ -105,6 +130,11 @@ func render(ts string, options *Options, out string) error {
 	if err != nil {
 		return errors.Wrap(err, "os.Open failed")
 	}
+
+	tpl, err := template.New("").Parse(ts)
+	if err != nil {
+		return errors.Wrap(err, "template.New failed")
+	}
 	if err := tpl.Execute(fp, options); err != nil {
 		return errors.Wrap(err, "tpl.Execute failed")
 	}
@@ -112,5 +142,6 @@ func render(ts string, options *Options, out string) error {
 		return errors.Wrap(err, "close failed")
 	}
 
+	fmt.Printf("render %v success\n", out)
 	return nil
 }

@@ -32,7 +32,9 @@ func main() {
 	if options.Help {
 		fmt.Println(flag.Usage())
 		fmt.Println(`Examples:
-  tpl --type rpcx --rpcx.name rpc-demo --rpcx.package github.com/hatlonely/rpcx-demo`)
+  tpl --type rpcx --rpcx.name rpc-demo --rpcx.package github.com/hatlonely/rpcx-demo
+  tpl --type rpcx --rpcx.name rpc-demo --rpcx.package github.com/hatlonely/rpcx-demo --prefix=tmp`,
+		)
 		return
 	}
 	if options.Version {

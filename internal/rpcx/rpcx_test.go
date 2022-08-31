@@ -11,8 +11,8 @@ func TestTplMk(t *testing.T) {
 		tpl, err := NewTemplateWithOptions(&Options{
 			Name: "rpc-tool",
 			Registry: struct {
-				Endpoint  string `dft:"docker.io"`
-				Namespace string
+				Endpoint  string `flag:"usage: docker registry endpoint; default: docker.io"`
+				Namespace string `flag:"usage: docker registry namespace"`
 			}{
 				Endpoint:  "docker.io",
 				Namespace: "hatlonely",
