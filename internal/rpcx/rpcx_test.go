@@ -21,6 +21,6 @@ func TestTplMk(t *testing.T) {
 		})
 
 		So(err, ShouldBeNil)
-		So(tpl.Render("."), ShouldBeNil)
+		So(tpl.Render("tmp"), ShouldBeNil)
 	})
 }
