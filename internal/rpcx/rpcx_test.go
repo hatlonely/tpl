@@ -17,7 +17,7 @@ func TestTplMk(t *testing.T) {
 				Endpoint:  "docker.io",
 				Namespace: "hatlonely",
 			},
-			GoProxy: "",
+			Package: "github.com/hatlonely/rpcx-demo",
 		})
 
 		So(err, ShouldBeNil)
