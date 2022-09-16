@@ -107,8 +107,6 @@ func NewTemplateWithOptions(options *Options) (*Template, error) {
 		options.Editable[key] = val
 	}
 
-	fmt.Println(options.Editable)
-
 	return &Template{
 		options: options,
 		tpls: []render.Desc{
