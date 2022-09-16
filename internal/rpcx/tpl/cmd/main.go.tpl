@@ -1,6 +1,3 @@
-package rpcx
-
-var cmdMain = `
 package main
 
 import (
@@ -85,4 +82,3 @@ func main() {
 	grpcGateway.Stop()
 	infoLog.Info("server exit properly")
 }
-`

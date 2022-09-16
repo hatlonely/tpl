@@ -1,6 +1,4 @@
-package rpcx
-
-var ConfigBaseJson = `{
+{
   "decoder": {
     "type": "Json"
   },
@@ -11,4 +9,3 @@ var ConfigBaseJson = `{
     }
   }
 }
-`

@@ -1,6 +1,4 @@
-package rpcx
-
-var ConfigAppJson = `{
+{
   "grpcGateway": {
     "httpPort": 80,
     "grpcPort": 6080,
@@ -21,7 +19,7 @@ var ConfigAppJson = `{
     "enableCors": true,
     "cors": {
       "allowAll": true,
-      "allowMethod": ["GET, HEAD, POST, PUT, DELETE"],
+      "allowMethod": ["GET, HEAD, POST, PUT, DELETE"]
     }
   },
   "service": {
@@ -62,4 +60,3 @@ var ConfigAppJson = `{
     }
   }
 }
-`

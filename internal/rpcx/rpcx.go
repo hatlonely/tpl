@@ -1,6 +1,7 @@
 package rpcx
 
 import (
+	_ "embed"
 	"fmt"
 	"os"
 	"path/filepath"
@@ -9,6 +10,45 @@ import (
 	"github.com/hatlonely/go-kit/strx"
 	"github.com/pkg/errors"
 )
+
+//go:embed tpl/README.md
+var readmeMd string
+
+//go:embed tpl/.rpcx.mk
+var rpcxMk string
+
+//go:embed tpl/Dockerfile
+var dockerfile string
+
+//go:embed tpl/.gitignore
+var gitignore string
+
+//go:embed tpl/api/api.proto
+var apiProto string
+
+//go:embed tpl/internal/service/service.go.tpl
+var internalServiceService string
+
+//go:embed tpl/cmd/main.go.tpl
+var cmdMain string
+
+//go:embed tpl/config/app.json
+var configAppJson string
+
+//go:embed tpl/config/base.json
+var configBaseJson string
+
+//go:embed tpl/.ops.yaml
+var opsYaml string
+
+//go:embed tpl/Makefile
+var makefile string
+
+//go:embed tpl/ops/helm/values-adapter.yaml
+var opsHelmValuesAdapterYaml string
+
+//go:embed tpl/.rpcx.ops.yaml
+var rpcxOpsYaml string
 
 type Options struct {
 	Name      string `flag:"usage: project name"`
@@ -81,10 +121,10 @@ func NewTemplateWithOptions(options *Options) (*Template, error) {
 			{Tpl: internalServiceService, Out: "internal/service/service.go"},
 			{Tpl: cmdMain, Out: "cmd/main.go"},
 			{Tpl: readmeMd, Out: "README.md"},
-			{Tpl: ConfigBaseJson, Out: "config/base.json"},
-			{Tpl: ConfigAppJson, Out: "config/app.json"},
+			{Tpl: configBaseJson, Out: "config/base.json"},
+			{Tpl: configAppJson, Out: "config/app.json"},
 			{Tpl: opsYaml, Out: ".ops.yaml", Disable: !options.EnableOps},
-			{Tpl: rpcxOpsYaml, Out: ".rpcx.ops.yaml"},
+			{Tpl: rpcxOpsYaml, Out: ".rpcx.ops.yaml", Disable: !options.EnableOps},
 			{Tpl: opsHelmValuesAdapterYaml, Out: "ops/helm/values-adapter.yaml", Disable: !options.EnableOps || !options.Ops.EnableHelm},
 		},
 	}, nil

@@ -1,6 +1,4 @@
-package rpcx
-
-var rpcxOpsYaml = `name: {{ .Name }}
+name: {{ .Name }}
 
 dep:
   ops:
@@ -11,28 +9,28 @@ dep:
 env:
   default:
     NAME: "{{ .Name }}"
-	GIT_TAG: "$(git describe --tags)"
+    GIT_TAG: "$(git describe --tags)"
     VERSION: "$(git describe --tags | awk '{print(substr($0,2,length($0)))}')"
     REGISTRY_ENDPOINT: "{{ "{{ .registry.endpoint }}" }}"
     REGISTRY_USERNAME: "{{ "{{ .registry.username }}" }}"
     REGISTRY_PASSWORD: "{{ "{{ .registry.password }}" }}"
     REGISTRY_NAMESPACE: "{{ "{{ .registry.namespace }}" }}"
-	{{- if .Ops.EnableHelm }}
+    {{- if .Ops.EnableHelm }}
     K8S_CONTEXT: "k8s-test"
     NAMESPACE: "default"
     PULL_SECRET_NAME: "{{ .Name }}-pull-secret"
     REPLICA_COUNT: 3
     INGRESS_HOST: "example.com"
     SECRET_NAME: "{{ .Name }}-tls"
-	{{- if .Ops.EnableEsLog }}
+    {{- if .Ops.EnableEsLog }}
     ELASTICSEARCH_ENDPOINT: "https://security-master:9200"
     ELASTICSEARCH_PASSWORD: "{{ "{{ .elasticsearch.password }}" }}"
-	{{- end }}
-	{{- if .Ops.EnableTrace }}
+    {{- end }}
+    {{- if .Ops.EnableTrace }}
     JAEGER_SAMPLING_SERVER_URL: "http://jaeger-agent.monitoring:5778/sampling"
     JAEGER_REPORTER_LOCAL_AGENT_HOST_PORT: "jaeger-agent.monitoring:6831"
-	{{- end }}
-	{{- end }}
+    {{- end }}
+    {{- end }}
 
 task:
   image:
@@ -59,4 +57,3 @@ task:
           "delete") helm delete "${NAME}" -n "${NAMESPACE}";;
         esac
   {{- end }}
-`

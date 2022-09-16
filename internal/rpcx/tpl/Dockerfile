@@ -1,6 +1,4 @@
-package rpcx
-
-var dockerfile = `{{ if eq .ImageType "centos" }}
+{{ if eq .ImageType "centos" }}
 FROM golang:1.16 AS build
 
 ARG version
@@ -35,4 +33,3 @@ COPY --from=build /go/src/build /work/{{ .Name }}
 WORKDIR /work/{{ .Name }}
 CMD [ "bin/{{ .Name }}", "-c", "config/base.json" ]
 {{ end }}
-`

@@ -1,11 +1,12 @@
-package rpcx
-
-var rpcxMk = `NAME ?= {{ .Name }}
+NAME ?= {{ .Name }}
 REGISTRY_ENDPOINT ?= {{ .Registry.Endpoint }}
 REGISTRY_NAMESPACE ?= {{ .Registry.Namespace }}
 VERSION ?= $(shell git describe --tags | awk '{print(substr($$0,2,length($$0)))}')
 
-{{ if .GoProxy }}export GOPROXY={{ .GoProxy }}{{ end }}
+{{if .GoProxy -}}
+export GOPROXY={{ .GoProxy }}
+{{- end }}
+
 define BUILD_VERSION
   version: $(shell git describe --tags)
 gitremote: $(shell git remote -v | grep fetch | awk '{print $$2}')
@@ -50,4 +51,3 @@ codegen: api/{{ .Name }}.proto
 .PHONY: image
 image:
 	docker build --build-arg version="$${BUILD_VERSION}" --tag=${REGISTRY_ENDPOINT}/${REGISTRY_NAMESPACE}/${NAME}:${VERSION} .
-`

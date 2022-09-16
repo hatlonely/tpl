@@ -1,6 +1,3 @@
-package rpcx
-
-var internalServiceService = `
 package service
 
 import (
@@ -56,4 +53,3 @@ func (s *{{ .Service }}Service) Add(ctx context.Context, req *api.AddReq) (*api.
 		Val: req.I1 + req.I2,
 	}, nil
 }
-`
