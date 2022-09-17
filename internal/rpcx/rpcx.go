@@ -59,7 +59,8 @@ type Options struct {
 		Endpoint  string `flag:"usage: docker registry endpoint; default: docker.io"`
 		Namespace string `flag:"usage: docker registry namespace"`
 	}
-	GoProxy   string `flag:"usage: set go proxy in Makefile"`
+	GoProxy   string `flag:"usage: set go proxy in Makefile; default: goproxy.cn"`
+	GoPrivate string `flag:"usage: set go private in Makefile"`
 	EnableOps bool   `flag:"usage: generate .ops.yaml"`
 	Ops       struct {
 		EnableHelm  bool `flag:"usage: enable helm task"`

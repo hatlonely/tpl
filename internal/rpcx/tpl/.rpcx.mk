@@ -3,9 +3,12 @@ REGISTRY_ENDPOINT ?= {{ .Registry.Endpoint }}
 REGISTRY_NAMESPACE ?= {{ .Registry.Namespace }}
 VERSION ?= $(shell git describe --tags | awk '{print(substr($$0,2,length($$0)))}')
 
-{{if .GoProxy -}}
-export GOPROXY={{ .GoProxy }}
-{{- end }}
+{{- if .GoProxy}}
+export GOPROXY={{.GoProxy}}
+{{- end}}
+{{- if .GoPrivate}}
+export GOPRIVATE={{.GoPrivate}}
+{{- end}}
 
 define BUILD_VERSION
   version: $(shell git describe --tags)
